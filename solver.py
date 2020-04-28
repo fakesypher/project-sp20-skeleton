@@ -17,15 +17,40 @@ def solve(G):
     if G.number_of_nodes() == 2:
         G.remove_node(0)
         return G
+    apd = []
     T = naive_solve(G)
+    apd.append(T)
+    #T = minimum_routing_cost_approx(G)
+    #apd.append(T)
+    T = greedy_mds(G)
+    apd.append(T)
     
-    return T
+    return min(apd, key=average_pairwise_distance)
 
 def minimum_routing_cost_approx(G):
     """
     Returns the approximate minimum routing cost tree
     """
+    return ...
 
+def greedy_mds(G):
+    nodes = [False for node in G.nodes()]
+    deg_sort = sorted(G.degree(), reverse=True, key=lambda x: x[0])
+    T = nx.Graph()
+    while not all(nodes):
+        top = deg_sort.pop()
+        T.add_node(top[0])
+        for node in nx.all_neighbors(G, top[0]):
+            nodes[node] = True
+    T_nodes = T.nodes()
+    final = G.copy()
+    for node in G.copy():
+        if node not in T_nodes:
+            final.remove_node(node)
+
+    if not nx.is_connected(final):
+        return nx.minimum_spanning_tree(G)
+    return nx.minimum_spanning_tree(final)
 
 
 def naive_solve(G):
