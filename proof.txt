@@ -1,0 +1,3 @@
+The Minimum Weighted Routing Cost Connected Dominating Set problem:
+Find the minimum routing cost weighted
+connected, dominating set
